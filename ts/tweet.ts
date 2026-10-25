@@ -9,13 +9,23 @@ class Tweet {
 
 	//returns either 'live_event', 'achievement', 'completed_event', or 'miscellaneous'
     get source():string {
-        //TODO: identify whether the source is a live event, an achievement, a completed event, or miscellaneous.
-        return "unknown";
+        if (this.text.startsWith("Just completed") || this.text.startsWith("Just posted")) {
+            return "completed_event";
+        }
+        if (this.text.includes("right now")) {
+            return "live_event";
+        }
+        if (this.text.startsWith("Achieved") || this.text.includes("set a goal")) {
+            return "achievement";
+        }
+        return "miscellaneous";
     }
 
     //returns a boolean, whether the text includes any content written by the person tweeting.
     get written():boolean {
-        //TODO: identify whether the tweet is written
+        if (this.text.includes(" - ") && !this.text.includes("Check it out!")) {
+            return true;
+        }
         return false;
     }
 
@@ -23,28 +33,76 @@ class Tweet {
         if(!this.written) {
             return "";
         }
-        //TODO: parse the written text from the tweet
-        return "";
+        // the user's text starts after - and ends at the link
+        var start = this.text.indexOf(" - ") + 3;
+        var end = this.text.indexOf("https://");
+        if (end == -1) {
+            end = this.text.length;
+        }
+        return this.text.substring(start, end);
+
     }
 
     get activityType():string {
         if (this.source != 'completed_event') {
             return "unknown";
         }
-        //TODO: parse the activity type from the text of the tweet
-        return "";
+        // find the unit
+        var end = this.text.indexOf(" with @Runkeeper");
+        if (end == -1) {
+            end = this.text.indexOf(" - ");
+        }
+        // look before the users text
+        var front = this.text.substring(0, end);
+        var unitIndex = front.indexOf( " mi ");
+        if (unitIndex == -1) {
+            unitIndex = front.indexOf( " km ");
+        }
+        if (unitIndex == -1) {
+            return "other";
+        }
+        return this.text.substring(unitIndex + 4, end);
     }
 
     get distance():number {
         if(this.source != 'completed_event') {
             return 0;
         }
-        //TODO: prase the distance from the text of the tweet
-        return 0;
+        var end = this.text.indexOf(" with @Runkeeper");
+        if (end == -1) {
+            end = this.text.indexOf(" - ");
+        }
+        var front = this.text.substring(0, end);
+        var unitIndex = front.indexOf(" mi ");
+        var isKm = false;
+        if (unitIndex == -1) {
+            unitIndex = this.text.indexOf(" km ");
+            isKm = true;
+        }
+        if (unitIndex == -1) {
+            return 0;
+        }
+        var start = this.text.indexOf(" a ") + 3;
+        var number = parseFloat(this.text.substring(start, unitIndex));
+        if (isKm) {
+            return number / 1.609;
+        }
+        return number;
     }
 
     getHTMLTableRow(rowNumber:number):string {
-        //TODO: return a table row which summarizes the tweet with a clickable link to the RunKeeper activity
-        return "<tr></tr>";
+        // wrap link in <a> tag
+        var tweetText = this.text;
+        var linkStart = this.text.indexOf("https://");
+        if (linkStart != -1) {
+            var linkEnd = this.text.Indexof(" ", linkStart);
+            if (linkEnd == -1) {
+                linkEnd = this.text.length;
+            }
+            
+            var link = this.text.substring(linkStart, linkEnd);
+            tweetText = this.text.substring(0, linkStart) + "<a href='" + link + "'>" + link + "</a>" + this.text.substring(linkEnd);
+        }
+        return "<tr></tr>"; + rowNumber + "</td><td>" + this.activityType + "</td><td>" = tweetText + "</td></tr>";
     }
 }
