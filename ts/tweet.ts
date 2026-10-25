@@ -76,7 +76,7 @@ class Tweet {
         var unitIndex = front.indexOf(" mi ");
         var isKm = false;
         if (unitIndex == -1) {
-            unitIndex = this.text.indexOf(" km ");
+            unitIndex = front.indexOf(" km ");
             isKm = true;
         }
         if (unitIndex == -1) {
@@ -95,7 +95,7 @@ class Tweet {
         var tweetText = this.text;
         var linkStart = this.text.indexOf("https://");
         if (linkStart != -1) {
-            var linkEnd = this.text.Indexof(" ", linkStart);
+            var linkEnd = this.text.indexOf(" ", linkStart);
             if (linkEnd == -1) {
                 linkEnd = this.text.length;
             }
@@ -103,6 +103,6 @@ class Tweet {
             var link = this.text.substring(linkStart, linkEnd);
             tweetText = this.text.substring(0, linkStart) + "<a href='" + link + "'>" + link + "</a>" + this.text.substring(linkEnd);
         }
-        return "<tr></tr>"; + rowNumber + "</td><td>" + this.activityType + "</td><td>" = tweetText + "</td></tr>";
+        return "<tr><td>" + rowNumber + "</td><td>" + this.activityType + "</td><td>" + tweetText + "</td></tr>";
     }
 }
