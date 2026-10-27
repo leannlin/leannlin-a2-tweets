@@ -48,8 +48,8 @@ function parseTweets(runkeeper_tweets) {
 	  },
 	  "mark": "bar",
 	  "encoding": {
-		"x": {"field": "activity", "type": "nominal", "sort": "-y"},
-		"y": {"field": "count", "type": "quantitative"}
+		"x": {"field": "activity", "type": "nominal", "sort": "-y", "title": "Activity Type"},
+		"y": {"field": "count", "type": "quantitative", "title": "Number of Tweets"},
 	  }
 	  
 	};
@@ -71,14 +71,15 @@ function parseTweets(runkeeper_tweets) {
 	distance_vis_spec = {
 	  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
 	  "description": "The distance people went in the top 3 activities each day",
+	  "title": "Distance of the top three activities daily",
 	  "data": {
 	    "values": distanceData
 	  },
 	  "mark": "point",
 	  "encoding": {
-		"x": {"field": "time", "timeUnit": "day", "type": "ordinal"},
-		"y": {"field": "distance", "type": "quantitative"},
-		"color": {field: "activity", "type": "nominal"}
+		"x": {"field": "time", "timeUnit": "day", "type": "ordinal", "title": "Time (Day)"},
+		"y": {"field": "distance", "type": "quantitative", "title": "Distance"},
+		"color": {"field": "activity", "type": "nominal", "title": "Activity"}
 	  }
 	};
 
@@ -87,14 +88,15 @@ function parseTweets(runkeeper_tweets) {
 	distance_vis_agg_spec = {
 	  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
 	  "description": "Average distance of the top three activities daily",
+	  "title": "Average distance of the top three activities daily",
 	  "data": {
 	    "values": distanceData
 	  },
 	  "mark": "point",
 	  "encoding": {
-		"x": {"field": "time", "timeUnit": "day", "type": "ordinal"},
-		"y": {"field": "distance", "type": "quantitative", "aggregate": "mean"},
-		"color": {field: "activity", "type": "nominal"}
+		"x": {"field": "time", "timeUnit": "day", "type": "ordinal", "title": "Time (Day)"},
+		"y": {"field": "distance", "type": "quantitative", "aggregate": "mean", "title": "Mean Distance"},
+		"color": {field: "activity", "type": "nominal", "title": "Activity"}
 	  }
 	};
 

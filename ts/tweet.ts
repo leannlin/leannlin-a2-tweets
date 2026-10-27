@@ -59,6 +59,11 @@ class Tweet {
             unitIndex = front.indexOf( " km ");
         }
         if (unitIndex == -1) {
+            var start = this.text.indexOf("Just posted a ");
+            var inIndex = this.text.indexOf(" in ", start);
+            if (start != -1 && inIndex != -1) {
+                return this.text.substring(start + 14, inIndex);
+            }
             return "other";
         }
         return this.text.substring(unitIndex + 4, end);
